@@ -1,0 +1,41 @@
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# export SYSTEMD_PAGER=
+
+# User specific aliases and functions
+export GOPATH=/home/son/git/StudyGolang
+
+# The next line updates PATH for the Google Cloud SDK.
+source '/home/son/google-cloud-sdk/path.bash.inc'
+
+# The next line enables bash completion for gcloud.
+source '/home/son/google-cloud-sdk/completion.bash.inc'
+
+# GD font PATH
+export GDFONTPATH=/usr/share/fonts/msttcore
+
+# Include path for C header files
+export C_INCLUDE_PATH=/usr/include/openmpi-x86_64:/usr/include/c++/4.8.2/i686-redhat-linux:$C_INCLUDE_PATH
+
+# Include path for CPLUS header files
+export CPLUS_INCLUDE_PATH=/usr/include/c++/4.8.2/i686-redhat-linux:$CPLUS_INCLUDE_PATH
+
+# Library path for linking
+export LIBRARY_PATH=/usr/lib64/openmpi/lib:$LIBRARY_PATH
+
+# MPI include PATH
+export MPI_INCLUDE_PATH=/usr/include/c++/4.8.2/i686-redhat-linux:$MPI_INCLUDE_PATH
+
+#cd git/MPM/GIMP-2D-v895/
+
+export JAVA_HOME=/etc/alternatives/jre_1.8.0_openjdk
+
+eval `perl -Mlocal::lib`
+
+cd

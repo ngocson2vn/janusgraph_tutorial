@@ -101,7 +101,7 @@ public class LoadData {
     Vertex[] users = new Vertex[count];
 
     for (int i = 0; i < count; i++) {
-      users[i] = addUser("testUser" + i);
+      users[i] = addUser("testUser" + i, "Dummy" + i);
     }
 
     return users;
@@ -122,9 +122,10 @@ public class LoadData {
    *          username for this user
    * @return the created vertex
    */
-  private Vertex addUser(String userName) {
+  private Vertex addUser(String userName, String firstName) {
     Vertex user = graph.addVertex(Schema.USER);
     user.property(Schema.USER_NAME, userName);
+    user.property(Schema.FIRST_NAME, firstName);
     return user;
   }
 

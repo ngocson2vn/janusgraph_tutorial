@@ -17,13 +17,11 @@ import static org.apache.tinkerpop.gremlin.process.traversal.P.without;
 
 public class QueryRunner {
 
-
   private static final Logger LOGGER = LoggerFactory.getLogger(QueryRunner.class);
 
   public static final String userVertex = "userVertex";
   public static final String postsEdge = "postsEdge";
   public static final String statusUpdateVertex = "statusUpdateEdge";
-
 
   ///////////////////////
   // Instance Methods //
@@ -67,91 +65,73 @@ public class QueryRunner {
     return getFollowedUsers().in(Schema.FOLLOWS);
   }
 
-  public GraphTraversal<Vertex, Vertex> getFollowRecommendation(){
-    return getUser().
-        aggregate("me").
-        aggregate("ignore").
-        out(Schema.FOLLOWS).
-        aggregate("ignore").
-        cap("me").
-        unfold().
-        in(Schema.FOLLOWS).
-        where(without("ignore"));
+  public GraphTraversal<Vertex, Vertex> getFollowRecommendation() {
+    return getUser().aggregate("me").aggregate("ignore").out(Schema.FOLLOWS).aggregate("ignore").cap("me").unfold()
+        .in(Schema.FOLLOWS).where(without("ignore"));
   }
 
-  public GraphTraversal<Vertex, Vertex> getTimeline(int limit){
-    return getUser().
-        aggregate("users").
-        out(FOLLOWS).
-        aggregate("users").
-        cap("users").
-        unfold().
-        outE(POSTS).
-        order().by(CREATED_AT, decr).
-        limit(limit).
-        inV();
+  public GraphTraversal<Vertex, Vertex> getTimeline(int limit) {
+    return getUser().aggregate("users").out(FOLLOWS).aggregate("users").cap("users").unfold().outE(POSTS).order()
+        .by(CREATED_AT, decr).limit(limit).inV();
   }
 
-  public GraphTraversal<Vertex, Map<String, Map<String,Object>>> getTimeline2(int limit){
-    return getUser().
-        aggregate("users").
-        out(FOLLOWS).
-        aggregate("users").
-        cap("users").
-        unfold().
-        as(userVertex).
-        outE(POSTS).
-        as(postsEdge).
-        order().by(CREATED_AT, decr).
-        limit(limit).
-        inV().
-        as(statusUpdateVertex).
-        select(userVertex, postsEdge, statusUpdateVertex);
+  public GraphTraversal<Vertex, Map<String, Map<String, Object>>> getTimeline2(int limit) {
+    return getUser().aggregate("users").out(FOLLOWS).aggregate("users").cap("users").unfold().as(userVertex).outE(POSTS)
+        .as(postsEdge).order().by(CREATED_AT, decr).limit(limit).inV().as(statusUpdateVertex)
+        .select(userVertex, postsEdge, statusUpdateVertex);
   }
-
 
   public void runQueries() {
 
     LOGGER.info("Getting user:");
     print(getUser());
 
-//    LOGGER.info("Getting status updates:");
-//    print(getStatusUpdate());
-//
-//    LOGGER.info("Getting followed users");
-//    print(getFollowedUsers());
-//
-//    LOGGER.info("Getting followers users");
-//    print(getFollowers());
-//
-//    LOGGER.info("Getting followers of followed users");
-//    print(getFollowersOfFollowedUsers());
-//
-//    LOGGER.info("Getting recommendations of users to follow");
-//    print(getFollowRecommendation());
-//
-//    LOGGER.info("Printing timeline");
-//    print(getTimeline(100));
-//
-//    LOGGER.info("Printing timeline");
-//    printTimeline(getTimeline2(100));
-//
-//    System.exit(0);
+    // LOGGER.info("Getting status updates:");
+    // print(getStatusUpdate());
+    //
+    // LOGGER.info("Getting followed users");
+    // print(getFollowedUsers());
+    //
+    // LOGGER.info("Getting followers users");
+    // print(getFollowers());
+    //
+    // LOGGER.info("Getting followers of followed users");
+    // print(getFollowersOfFollowedUsers());
+    //
+    // LOGGER.info("Getting recommendations of users to follow");
+    // print(getFollowRecommendation());
+    //
+    // LOGGER.info("Printing timeline");
+    // print(getTimeline(100));
+    //
+    // LOGGER.info("Printing timeline");
+    // printTimeline(getTimeline2(100));
+    //
+    // System.exit(0);
   }
 
   /**
-   * Just a simple print method for every property returned from a vertex traversal
+   * Just a simple print method for every property returned from a vertex
+   * traversal
+   * 
    * @param traversal
    */
   public void print(GraphTraversal<Vertex, Vertex> traversal) {
     resetTimer();
-    GraphTraversal<Vertex, Map<String, Object>> valueMap = traversal.valueMap(true);
+    // GraphTraversal<Vertex, Map<String, Object>> valueMap =
+    // traversal.valueMap(true);
     int count = 0;
 
-    for (GraphTraversal<Vertex, Map<String, Object>> it = valueMap; it.hasNext(); ) {
-      Map<String, Object> item = it.next();
-      LOGGER.info(" {}: {} ", count++, item.toString());
+    // for (GraphTraversal<Vertex, Map<String, Object>> it = valueMap; it.hasNext();
+    // ) {
+    // Map<String, Object> item = it.next();
+    
+    while (traversal.hasNext()) {
+      Vertex user = traversal.next();
+      LOGGER.info(" {}: {} -> {}, {} -> {}", user.id(), Schema.USER_NAME, user.value(Schema.USER_NAME), Schema.FIRST_NAME, user.value(Schema.FIRST_NAME));
+      count++;
     }
+
     LOGGER.info("Printed {} element(s) in {}ms", count, duration());
   }
 
@@ -163,13 +143,8 @@ public class QueryRunner {
       Vertex user = (Vertex) item.get(userVertex);
       Edge posts = (Edge) item.get(postsEdge);
       Vertex statusUpdate = (Vertex) item.get(statusUpdateVertex);
-      LOGGER.info(
-          " {}: @{} {}: {}",
-          count++,
-          user.value(USER_NAME),
-          formatTimestamp(posts.value(CREATED_AT)),
-          statusUpdate.value(CONTENT)
-      );
+      LOGGER.info(" {}: @{} {}: {}", count++, user.value(USER_NAME), formatTimestamp(posts.value(CREATED_AT)),
+          statusUpdate.value(CONTENT));
     }
 
     LOGGER.info("Printed {} element(s) in {}ms", count, duration());
@@ -180,12 +155,11 @@ public class QueryRunner {
     return d.toString();
   }
 
-
-  private void resetTimer(){
+  private void resetTimer() {
     startedAt = (new Date()).getTime();
   }
 
-  private long duration(){
+  private long duration() {
     return (new Date()).getTime() - startedAt;
   }
 }

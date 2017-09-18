@@ -55,12 +55,13 @@ public class Schema {
   public static final String BACKING_INDEX = "search";
 
   public static final String USER = "user";
-  public static final String USER_NAME = "marcelocf.janusgraph.userName";
+  public static final String USER_NAME = "userName";
+  public static final String FIRST_NAME = "firstName";
 
   public static final String STATUS_UPDATE = "statusUpdate";
-  public static final String CONTENT = "marcelocf.janusgraph.content";
+  public static final String CONTENT = "content";
 
-  public static final String CREATED_AT = "marcelocf.janusgraph.createdAt";
+  public static final String CREATED_AT = "createdAt";
 
   public static final String POSTS = "posts";
   public static final String FOLLOWS = "follows";
@@ -142,6 +143,7 @@ public class Schema {
     LOGGER.info("Create {} schema", USER);
     VertexLabel user = mgt.makeVertexLabel(USER).make();
     PropertyKey userName = mgt.makePropertyKey(USER_NAME).dataType(String.class).make();
+    PropertyKey firstName = mgt.makePropertyKey(FIRST_NAME).dataType(String.class).cardinality(Cardinality.SINGLE).make();
 
     mgt.buildIndex(indexName(USER, USER_NAME), Vertex.class).
         addKey(userName, Mapping.STRING.asParameter()).
