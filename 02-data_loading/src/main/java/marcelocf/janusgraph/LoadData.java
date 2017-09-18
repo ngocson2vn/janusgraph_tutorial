@@ -9,8 +9,10 @@ import org.janusgraph.core.JanusGraphFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * LoadData creation for our example graph db
@@ -28,30 +30,30 @@ public class LoadData {
    */
   private static final Logger LOGGER = LoggerFactory.getLogger(LoadData.class);
 
-
-
   /////////////////////
   // Static Methods //
   ///////////////////
 
   /**
-   * The main code basically instantiate its own class and call individual methods.
+   * The main code basically instantiate its own class and call individual
+   * methods.
+   * 
    * @param argv
    */
   public static void main(String[] argv) {
     LoadData loader = new LoadData(Schema.CONFIG_FILE);
 
-    Vertex users[] = loader.generateUsers(1000);
+    Vertex users[] = loader.generateUsers(4);
     loader.commit();
-    for(Vertex user: users) {
+    for (Vertex user : users) {
       LOGGER.info("User {} comments:", user.value(Schema.USER_NAME).toString());
-      for(Vertex update: loader.generateStatusUpdates(user, 1000)) {
+      for (Vertex update : loader.generateStatusUpdates(user, 2)) {
         LOGGER.info("     -> {}", update.value(Schema.CONTENT).toString());
       }
       loader.commit();
 
       LOGGER.info("User {} follows:", user.value(Schema.USER_NAME).toString());
-      for(Vertex followedUser: loader.generateFollows(user, users, 50)) {
+      for (Vertex followedUser : loader.generateFollows(user, users, 2)) {
         LOGGER.info("     -> {}", followedUser.value(Schema.USER_NAME).toString());
       }
       loader.commit();
@@ -83,45 +85,44 @@ public class LoadData {
     oneMonthAgo = cal.getTime();
   }
 
-
-  private void commit(){
+  private void commit() {
     graph.tx().commit();
   }
 
   /**
    * Commit the current transaction and close the graph.
    */
-  private void close(){
+  private void close() {
     commit();
     graph.close();
   }
 
-
-  private Vertex[] generateUsers(int count){
+  private Vertex[] generateUsers(int count) {
     Vertex[] users = new Vertex[count];
 
-    for(int i=0; i < count; i++){
+    for (int i = 0; i < count; i++) {
       users[i] = addUser("testUser" + i);
     }
 
     return users;
   }
 
-  private Vertex[] generateStatusUpdates(Vertex user, int count){
+  private Vertex[] generateStatusUpdates(Vertex user, int count) {
     Vertex[] updates = new Vertex[count];
-    for(int i=0; i < count; i++) {
+    for (int i = 0; i < count; i++) {
       updates[i] = addStatusUpdatew(user, getContent());
     }
     return updates;
   }
 
-
   /**
    * Add a user vertex
-   * @param userName username for this user
+   * 
+   * @param userName
+   *          username for this user
    * @return the created vertex
    */
-  private Vertex addUser(String userName){
+  private Vertex addUser(String userName) {
     Vertex user = graph.addVertex(Schema.USER);
     user.property(Schema.USER_NAME, userName);
     return user;
@@ -134,25 +135,37 @@ public class LoadData {
     return statusUpdate;
   }
 
-  private Vertex[] generateFollows(Vertex forUser, Vertex[] users, int count){
+  private Vertex[] generateFollows(Vertex forUser, Vertex[] users, int count) {
     Vertex[] followedUsers = new Vertex[count];
 
-    for(int i = 0; i < count; i++) {
-      followedUsers[i] = users[faker.number().numberBetween(0, users.length - 1)];
+    List<Integer> oldIndexes = new ArrayList<>();
+    long userId = Long.parseLong(forUser.id().toString());
+    
+    for (int i = 0; i < count; i++) {
+      int idx = 0;
+      do {
+        idx = (int)(Math.random() * users.length);
+        followedUsers[i] = users[idx];
+      } while (userId == Long.parseLong(users[idx].id().toString()) || oldIndexes.contains(idx));
+      
+      oldIndexes.add(idx);
+      
       Edge follows = forUser.addEdge(Schema.FOLLOWS, followedUsers[i], Schema.CREATED_AT, getTimestamp());
     }
+    
     return followedUsers;
   }
 
   /**
    * Return a timestamp between 1 month ago and now.
+   * 
    * @return
    */
-  private Long getTimestamp(){
+  private Long getTimestamp() {
     return faker.date().between(oneMonthAgo, new Date()).getTime();
   }
 
-  private String getContent(){
+  private String getContent() {
     return faker.chuckNorris().fact();
   }
 

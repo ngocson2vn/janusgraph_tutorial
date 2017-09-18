@@ -115,28 +115,28 @@ public class QueryRunner {
     LOGGER.info("Getting user:");
     print(getUser());
 
-    LOGGER.info("Getting status updates:");
-    print(getStatusUpdate());
-
-    LOGGER.info("Getting followed users");
-    print(getFollowedUsers());
-
-    LOGGER.info("Getting followers users");
-    print(getFollowers());
-
-    LOGGER.info("Getting followers of followed users");
-    print(getFollowersOfFollowedUsers());
-
-    LOGGER.info("Getting recommendations of users to follow");
-    print(getFollowRecommendation());
-
-    LOGGER.info("Printing timeline");
-    print(getTimeline(100));
-
-    LOGGER.info("Printing timeline");
-    printTimeline(getTimeline2(100));
-
-    System.exit(0);
+//    LOGGER.info("Getting status updates:");
+//    print(getStatusUpdate());
+//
+//    LOGGER.info("Getting followed users");
+//    print(getFollowedUsers());
+//
+//    LOGGER.info("Getting followers users");
+//    print(getFollowers());
+//
+//    LOGGER.info("Getting followers of followed users");
+//    print(getFollowersOfFollowedUsers());
+//
+//    LOGGER.info("Getting recommendations of users to follow");
+//    print(getFollowRecommendation());
+//
+//    LOGGER.info("Printing timeline");
+//    print(getTimeline(100));
+//
+//    LOGGER.info("Printing timeline");
+//    printTimeline(getTimeline2(100));
+//
+//    System.exit(0);
   }
 
   /**
