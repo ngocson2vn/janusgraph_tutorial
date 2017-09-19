@@ -43,7 +43,7 @@ public class LoadData {
   public static void main(String[] argv) {
     LoadData loader = new LoadData(Schema.CONFIG_FILE);
 
-    Vertex users[] = loader.generateUsers(4);
+    Vertex users[] = loader.generateUsers(2);
     loader.commit();
     for (Vertex user : users) {
       LOGGER.info("User {} comments:", user.value(Schema.USER_NAME).toString());
@@ -52,11 +52,11 @@ public class LoadData {
       }
       loader.commit();
 
-      LOGGER.info("User {} follows:", user.value(Schema.USER_NAME).toString());
-      for (Vertex followedUser : loader.generateFollows(user, users, 2)) {
-        LOGGER.info("     -> {}", followedUser.value(Schema.USER_NAME).toString());
-      }
-      loader.commit();
+      // LOGGER.info("User {} follows:", user.value(Schema.USER_NAME).toString());
+      // for (Vertex followedUser : loader.generateFollows(user, users, 2)) {
+      // LOGGER.info(" -> {}", followedUser.value(Schema.USER_NAME).toString());
+      // }
+      // loader.commit();
     }
 
     loader.close();
