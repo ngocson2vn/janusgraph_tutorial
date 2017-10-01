@@ -61,8 +61,9 @@ public class Schema {
   public static final String USER = "user";
   public static final String USER_NAME = "userName";
   public static final String FIRST_NAME = "firstName";
+  public static final String LAST_NAME = "lastName";
 
-  public static final String STATUS_UPDATE = "statusUpdate";
+  public static final String STATUS = "status";
   public static final String CONTENT = "content";
 
   public static final String CREATED_AT = "createdAt";
@@ -150,6 +151,8 @@ public class Schema {
     PropertyKey userName = mgt.makePropertyKey(USER_NAME).dataType(String.class).make();
     PropertyKey firstName = mgt.makePropertyKey(FIRST_NAME).dataType(String.class).cardinality(Cardinality.SINGLE)
         .make();
+    PropertyKey lastName = mgt.makePropertyKey(LAST_NAME).dataType(String.class).cardinality(Cardinality.SINGLE)
+        .make();
 
     mgt.buildIndex(indexName(USER, USER_NAME), Vertex.class).addKey(userName, Mapping.STRING.asParameter())
         .indexOnly(user).buildMixedIndex(BACKING_INDEX);
@@ -159,12 +162,12 @@ public class Schema {
    * Create the statusUpdate schema - vertex label, property and full-text index.
    */
   private void createStatusUpdateSchema() {
-    LOGGER.info("Create {} schema", STATUS_UPDATE);
-    VertexLabel statusUpdate = mgt.makeVertexLabel(STATUS_UPDATE).make();
+    LOGGER.info("Create {} schema", STATUS);
+    VertexLabel status = mgt.makeVertexLabel(STATUS).make();
     PropertyKey content = mgt.makePropertyKey(CONTENT).dataType(String.class).make();
 
-    mgt.buildIndex(indexName(STATUS_UPDATE, CONTENT), Vertex.class).addKey(content, Mapping.TEXTSTRING.asParameter())
-        .indexOnly(statusUpdate).buildMixedIndex(BACKING_INDEX);
+    mgt.buildIndex(indexName(STATUS, CONTENT), Vertex.class).addKey(content, Mapping.TEXTSTRING.asParameter())
+        .indexOnly(status).buildMixedIndex(BACKING_INDEX);
   }
 
   /**
@@ -210,6 +213,6 @@ public class Schema {
    * @return
    */
   public static String indexName(String label, String propertyKey) {
-    return label + ":by:" + propertyKey;
+    return "by_" + label + "_" + propertyKey;
   }
 }

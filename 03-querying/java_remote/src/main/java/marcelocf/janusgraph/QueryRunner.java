@@ -86,8 +86,8 @@ public class QueryRunner {
     LOGGER.info("Getting user:");
     print(getUser());
 
-    // LOGGER.info("Getting status updates:");
-    // print(getStatusUpdate());
+    LOGGER.info("Getting status updates:");
+    print(getStatusUpdate());
     //
     // LOGGER.info("Getting followed users");
     // print(getFollowedUsers());
@@ -118,17 +118,14 @@ public class QueryRunner {
    */
   public void print(GraphTraversal<Vertex, Vertex> traversal) {
     resetTimer();
-    // GraphTraversal<Vertex, Map<String, Object>> valueMap =
-    // traversal.valueMap(true);
+    GraphTraversal<Vertex, Map<String, Object>> valueMap = traversal.valueMap(true);
     int count = 0;
 
-    // for (GraphTraversal<Vertex, Map<String, Object>> it = valueMap; it.hasNext();
-    // ) {
-    // Map<String, Object> item = it.next();
-    
-    while (traversal.hasNext()) {
-      Vertex user = traversal.next();
-      LOGGER.info(" {}: {} -> {}, {} -> {}", user.id(), Schema.USER_NAME, user.value(Schema.USER_NAME), Schema.FIRST_NAME, user.value(Schema.FIRST_NAME));
+    for (GraphTraversal<Vertex, Map<String, Object>> it = valueMap; it.hasNext();) {
+      Map<String, Object> item = it.next();
+      for (Object key : item.keySet()) {
+        LOGGER.info(" {}: {}", key, item.get(key));
+      }
       count++;
     }
 

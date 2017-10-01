@@ -43,7 +43,7 @@ public class LoadData {
   public static void main(String[] argv) {
     LoadData loader = new LoadData(Schema.CONFIG_FILE);
 
-    Vertex users[] = loader.generateUsers(2);
+    Vertex users[] = loader.generateUsers(1);
     loader.commit();
     for (Vertex user : users) {
       LOGGER.info("User {} comments:", user.value(Schema.USER_NAME).toString());
@@ -101,7 +101,7 @@ public class LoadData {
     Vertex[] users = new Vertex[count];
 
     for (int i = 0; i < count; i++) {
-      users[i] = addUser("testUser" + i, "Dummy" + i);
+      users[i] = addUser("testUser" + i, "Foo" + i, "Bar" + i);
     }
 
     return users;
@@ -110,7 +110,7 @@ public class LoadData {
   private Vertex[] generateStatusUpdates(Vertex user, int count) {
     Vertex[] updates = new Vertex[count];
     for (int i = 0; i < count; i++) {
-      updates[i] = addStatusUpdatew(user, getContent());
+      updates[i] = addStatusUpdatew(user, user.id() + "Content" + i);
     }
     return updates;
   }
@@ -122,15 +122,16 @@ public class LoadData {
    *          username for this user
    * @return the created vertex
    */
-  private Vertex addUser(String userName, String firstName) {
+  private Vertex addUser(String userName, String firstName, String lastName) {
     Vertex user = graph.addVertex(Schema.USER);
     user.property(Schema.USER_NAME, userName);
     user.property(Schema.FIRST_NAME, firstName);
+    user.property(Schema.LAST_NAME, lastName);
     return user;
   }
 
   private Vertex addStatusUpdatew(Vertex user, String statusUpdateContent) {
-    Vertex statusUpdate = graph.addVertex(Schema.STATUS_UPDATE);
+    Vertex statusUpdate = graph.addVertex(Schema.STATUS);
     statusUpdate.property(Schema.CONTENT, statusUpdateContent);
     user.addEdge(Schema.POSTS, statusUpdate, Schema.CREATED_AT, getTimestamp());
     return statusUpdate;
