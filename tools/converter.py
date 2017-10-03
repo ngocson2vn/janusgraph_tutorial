@@ -37,6 +37,7 @@ def convertToString(byteArray):
     return byteString
 
 key = [16, -91, -96, 114, 116, 30, 117, 115, 101, 114, 78, 97, 109, -27]
-print "key: %s" % convertToString(key)
-print "key: %s" % convertToHex(key)
+print "key_raw: %s" % key
+print "key_text: %s" % convertToString(key)
+print "key_hex: %s" % convertToHex(key)
 
