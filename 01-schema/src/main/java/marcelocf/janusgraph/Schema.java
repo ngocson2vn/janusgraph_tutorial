@@ -149,13 +149,10 @@ public class Schema {
     LOGGER.info("Create {} schema", USER);
     VertexLabel user = mgt.makeVertexLabel(USER).make();
     PropertyKey userName = mgt.makePropertyKey(USER_NAME).dataType(String.class).make();
-    PropertyKey firstName = mgt.makePropertyKey(FIRST_NAME).dataType(String.class).cardinality(Cardinality.SINGLE)
-        .make();
-    PropertyKey lastName = mgt.makePropertyKey(LAST_NAME).dataType(String.class).cardinality(Cardinality.SINGLE)
-        .make();
+    mgt.makePropertyKey(FIRST_NAME).dataType(String.class).cardinality(Cardinality.SINGLE).make();
+    mgt.makePropertyKey(LAST_NAME).dataType(String.class).cardinality(Cardinality.SINGLE).make();
 
-    mgt.buildIndex(indexName(USER, USER_NAME), Vertex.class).addKey(userName, Mapping.STRING.asParameter())
-        .indexOnly(user).buildMixedIndex(BACKING_INDEX);
+    mgt.buildIndex(indexName(USER, USER_NAME), Vertex.class).addKey(userName, Mapping.STRING.asParameter()).indexOnly(user).buildMixedIndex(BACKING_INDEX);
   }
 
   /**
