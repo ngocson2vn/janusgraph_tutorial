@@ -1,18 +1,16 @@
 
 package marcelocf.janusgraph;
 
-import com.github.javafaker.Faker;
-import org.apache.tinkerpop.gremlin.structure.Edge;
+import java.util.Calendar;
+import java.util.Date;
+
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.janusgraph.core.JanusGraph;
 import org.janusgraph.core.JanusGraphFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import com.github.javafaker.Faker;
 
 /**
  * LoadData creation for our example graph db
@@ -137,27 +135,6 @@ public class LoadData {
     return statusUpdate;
   }
 
-  private Vertex[] generateFollows(Vertex forUser, Vertex[] users, int count) {
-    Vertex[] followedUsers = new Vertex[count];
-
-    List<Integer> oldIndexes = new ArrayList<>();
-    long userId = Long.parseLong(forUser.id().toString());
-    
-    for (int i = 0; i < count; i++) {
-      int idx = 0;
-      do {
-        idx = (int)(Math.random() * users.length);
-        followedUsers[i] = users[idx];
-      } while (userId == Long.parseLong(users[idx].id().toString()) || oldIndexes.contains(idx));
-      
-      oldIndexes.add(idx);
-      
-      Edge follows = forUser.addEdge(Schema.FOLLOWS, followedUsers[i], Schema.CREATED_AT, getTimestamp());
-    }
-    
-    return followedUsers;
-  }
-
   /**
    * Return a timestamp between 1 month ago and now.
    * 
@@ -165,10 +142,6 @@ public class LoadData {
    */
   private Long getTimestamp() {
     return faker.date().between(oneMonthAgo, new Date()).getTime();
-  }
-
-  private String getContent() {
-    return faker.chuckNorris().fact();
   }
 
 }

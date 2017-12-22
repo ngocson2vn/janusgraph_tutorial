@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>03-querying-java_remote</name>
-	<comment>Project 03-querying created by Buildship.</comment>
+	<name>03-querying</name>
+	<comment>Project java_builtin created by Buildship.</comment>
 	<projects>
 	</projects>
 	<buildSpec>

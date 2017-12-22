@@ -1,0 +1,2 @@
+include ':01-schema'
+project(':01-schema').projectDir = new File(settingsDir, '../01-schema')

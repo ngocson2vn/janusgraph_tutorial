@@ -60,11 +60,7 @@ task zip(type: Zip) {
     from configurations.runtime
 }
 
-
-def logSettings = ['-Dlog4j.configuration=log4j.properties']
-//def logSettings = ['-Dlog4j.configuration=../../../../../conf/log4j.properties']
-
 // Define the main class for the application
-mainClassName = 'marcelocf.janusgraph.RemoteQueries'
-applicationName = 'java_remote'
+mainClassName = 'marcelocf.janusgraph.BuiltinQueries'
+applicationName = 'java_builtin'
 applicationDefaultJvmArgs = ['-Dlog4j.configuration=log4j.properties']
